@@ -1,39 +1,16 @@
-import { useEffect, useState, useMemo } from 'react';
-import { BrowserRouter, Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './main-page.css';
 import Header from './header';
 import FeaturedHouseComponent from './featured-house';
 import HouseFilterComponent from './house-filter';
 import SearchResults from '../search-results';
 import HouseFromQuery from '../house/HouseFromQuery';
+import useHouses from '../hooks/useHouses';
+import useFeaturedHouse from '../hooks/useFeaturedHouse';
 
 function App() {
-  const [allHouses, setAllHouses] = useState([]);
-  const userName = useState(['David']);
-
-  // load data
-  useEffect(() => {
-    const fetchHouses = async () => {
-      const rsp = await fetch('/houses.json');
-      const houses = await rsp.json();
-      function numberWithSpaces(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-      }
-      houses.map((house) => {
-        house.nokPrice = numberWithSpaces(Math.floor(house.price * 8.71));
-        house.price = numberWithSpaces(house.price);
-      });
-      setAllHouses(houses);
-    };
-    fetchHouses();
-  }, []);
-
-  const featuredHouse = useMemo(() => {
-    if (allHouses.length) {
-      const randomIndex = Math.floor(Math.random() * allHouses.length);
-      return allHouses[randomIndex];
-    }
-  }, [allHouses]);
+  const allHouses = useHouses();
+  const featuredHouse = useFeaturedHouse(allHouses);
 
   return (
     <BrowserRouter>
