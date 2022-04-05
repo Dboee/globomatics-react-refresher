@@ -1,0 +1,12 @@
+.price {
+  font-size: larger;
+  color: coral;
+}
+
+.number {
+  width: 10em;
+  display: block;
+  word-wrap: break-word;
+  columns: 5;
+  column-gap: 0.2em;
+}
