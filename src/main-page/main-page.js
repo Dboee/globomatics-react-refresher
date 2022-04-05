@@ -7,6 +7,7 @@ import SearchResults from '../search-results';
 import HouseFromQuery from '../house/HouseFromQuery';
 import useHouses from '../hooks/useHouses';
 import useFeaturedHouse from '../hooks/useFeaturedHouse';
+import HousesContext from '../context/housesContext';
 
 function App() {
   const allHouses = useHouses();
@@ -14,25 +15,27 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='container'>
-        <Header
-          subtitle='Providing houses all over the world'
-          title='Some title'
-        />
-        <HouseFilterComponent allHouses={allHouses} />
-        <Switch>
-          <Route path='/searchresults/:country'>
-            <SearchResults allHouses={allHouses} />
-          </Route>
+      <HousesContext.Provider value={allHouses}>
+        <div className='container'>
+          <Header
+            subtitle='Providing houses all over the world'
+            title='Some title'
+          />
+          <HouseFilterComponent />
+          <Switch>
+            <Route path='/searchresults/:country'>
+              <SearchResults />
+            </Route>
 
-          <Route path='/house/:id'>
-            <HouseFromQuery allHouses={allHouses} />
-          </Route>
-          <Route path='/'>
-            <FeaturedHouseComponent house={featuredHouse} />
-          </Route>
-        </Switch>
-      </div>
+            <Route path='/house/:id'>
+              <HouseFromQuery />
+            </Route>
+            <Route path='/'>
+              <FeaturedHouseComponent house={featuredHouse} />
+            </Route>
+          </Switch>
+        </div>
+      </HousesContext.Provider>
     </BrowserRouter>
   );
 }
